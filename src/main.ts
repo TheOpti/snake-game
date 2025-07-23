@@ -1,16 +1,16 @@
-import './style.css'
+import './style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export const DIRECTIONS = {
   RIGHT: 'right',
   LEFT: 'left',
   UP: 'up',
-  DOWN: 'down',
+  DOWN: 'down'
 };
 
 export const DIMENSIONS = {
   WIDTH: 800,
-  HEIGHT: 600,
+  HEIGHT: 600
 };
 
 export const FRAME_LENGTH = 150;
@@ -68,25 +68,25 @@ function getNextSnakePosition() {
     case DIRECTIONS.RIGHT: {
       return {
         X: snake[0].x + 1,
-        Y: snake[0].y + 0,
+        Y: snake[0].y + 0
       };
     }
     case DIRECTIONS.LEFT: {
       return {
         X: snake[0].x - 1,
-        Y: snake[0].y + 0,
+        Y: snake[0].y + 0
       };
     }
     case DIRECTIONS.UP: {
       return {
         X: snake[0].x + 0,
-        Y: snake[0].y + 1,
+        Y: snake[0].y + 1
       };
     }
     case DIRECTIONS.DOWN: {
       return {
         X: snake[0].x + 0,
-        Y: snake[0].y - 1,
+        Y: snake[0].y - 1
       };
     }
   }
@@ -113,7 +113,7 @@ function drawSnake() {
 function generateFood() {
   food = {
     x: Math.round((Math.random() * (DIMENSIONS.WIDTH - 20)) / 20),
-    y: Math.round((Math.random() * (DIMENSIONS.HEIGHT - 20)) / 20),
+    y: Math.round((Math.random() * (DIMENSIONS.HEIGHT - 20)) / 20)
   };
   if (!checkIfFoodXYCorrect()) {
     generateFood();
