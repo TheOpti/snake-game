@@ -4,10 +4,16 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>Snake game</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+          <canvas id="canvas" width="600" height="400" class="border rounded shadow"></canvas>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
