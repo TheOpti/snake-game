@@ -3,7 +3,10 @@ import prettierPlugin from 'eslint-plugin-prettier';
 import globals from 'globals';
 
 export default [
+  eslintRecommended.configs.recommended,
+
   {
+    files: ['**/*.ts', '**/*.js', '**/*.mjs', '**/*.cjs'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -16,9 +19,6 @@ export default [
       prettier: prettierPlugin
     },
     rules: {
-      // ESLint recommended rules
-      ...eslintRecommended.rules,
-
       // Prettier formatting rules (uses .prettierrc if present)
       'prettier/prettier': [
         'error',

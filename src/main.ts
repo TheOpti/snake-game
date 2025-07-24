@@ -1,5 +1,5 @@
-import './style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './style.css';
 
 export const DIRECTIONS = {
   RIGHT: 'right',
