@@ -131,8 +131,13 @@ function checkKey(event: KeyboardEvent): void {
  * Draws the snake on the canvas.
  */
 function drawSnake(): void {
-  snake.forEach(({ x, y }) => {
-    paintCell(x, y);
+  snake.forEach(({ x, y }, idx) => {
+    // Draw head with a different color and an eye
+    if (idx === 0) {
+      paintCell(x, y, 'blue', true);
+    } else {
+      paintCell(x, y, 'blue');
+    }
   });
 }
 
@@ -213,13 +218,37 @@ function checkCollision(): void {
 }
 
 /**
- * Paints a cell at (x, y) on the canvas.
+ * Paints a cell at (x, y) on the canvas with a given color.
+ * If isHead is true, draws an eye inside the cell.
  */
-function paintCell(x: number, y: number): void {
-  canvasContext.fillStyle = 'blue';
+function paintCell(
+  x: number,
+  y: number,
+  color: string = 'blue',
+  isHead: boolean = false
+): void {
+  canvasContext.fillStyle = color;
   canvasContext.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
   canvasContext.strokeStyle = 'white';
   canvasContext.strokeRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+
+  if (isHead) {
+    // Draw eye (small white circle)
+    const eyeRadius = CELL_SIZE / 5;
+    const eyeOffsetX = CELL_SIZE / 2;
+    const eyeOffsetY = CELL_SIZE / 2;
+    canvasContext.beginPath();
+    canvasContext.arc(
+      x * CELL_SIZE + eyeOffsetX,
+      y * CELL_SIZE + eyeOffsetY,
+      eyeRadius,
+      0,
+      Math.PI * 2
+    );
+    canvasContext.fillStyle = 'white';
+    canvasContext.fill();
+    canvasContext.closePath();
+  }
 }
 
 // Start the game
