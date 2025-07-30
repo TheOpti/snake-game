@@ -1,9 +1,23 @@
 import eslintRecommended from '@eslint/js';
+import tseslint from 'typescript-eslint';
 import prettierPlugin from 'eslint-plugin-prettier';
 import globals from 'globals';
 
 export default [
   eslintRecommended.configs.recommended,
+  ...tseslint.configs.recommended,
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: './tsconfig.json',
+        ecmaVersion: 'latest',
+        sourceType: 'module'
+      }
+    },
+    rules: {}
+  },
 
   {
     files: ['**/*.ts', '**/*.js', '**/*.mjs', '**/*.cjs'],
@@ -19,7 +33,6 @@ export default [
       prettier: prettierPlugin
     },
     rules: {
-      // Prettier formatting rules (uses .prettierrc if present)
       'prettier/prettier': [
         'error',
         {
@@ -29,15 +42,11 @@ export default [
         }
       ],
 
-      // Remove trailing whitespace
       'no-trailing-spaces': 'error',
 
-      // Enforce a blank line after functions and classes
       'padding-line-between-statements': [
         'error',
-        // Add blank line after function declarations
         { blankLine: 'always', prev: 'function', next: '*' },
-        // Add blank line after class declarations
         { blankLine: 'always', prev: 'class', next: '*' }
       ]
     }

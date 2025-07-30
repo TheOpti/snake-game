@@ -6,18 +6,22 @@ export const DIRECTIONS = {
   LEFT: 'left',
   UP: 'up',
   DOWN: 'down'
-} as const; 
+} as const;
 
-type Direction = typeof DIRECTIONS[keyof typeof DIRECTIONS];
+type Direction = (typeof DIRECTIONS)[keyof typeof DIRECTIONS];
 
-export const DIMENSIONS = { 
+const a = 'asdsadsa';
+
+export const DIMENSIONS = {
   WIDTH: 800,
   HEIGHT: 600
 };
 
 export const FRAME_LENGTH = 150;
 
-const canvasElement = document.getElementById('canvas') as HTMLCanvasElement | null;
+const canvasElement = document.getElementById(
+  'canvas'
+) as HTMLCanvasElement | null;
 
 if (!canvasElement) {
   throw new Error('Canvas element not found');
@@ -95,9 +99,15 @@ function checkKey(event: KeyboardEvent) {
     currentDirection = DIRECTIONS.UP;
   } else if (event.key === 'ArrowDown' && currentDirection !== DIRECTIONS.UP) {
     currentDirection = DIRECTIONS.DOWN;
-  } else if (event.key === 'ArrowLeft' && currentDirection !== DIRECTIONS.RIGHT) {
+  } else if (
+    event.key === 'ArrowLeft' &&
+    currentDirection !== DIRECTIONS.RIGHT
+  ) {
     currentDirection = DIRECTIONS.LEFT;
-  } else if (event.key === 'ArrowRight' && currentDirection !== DIRECTIONS.LEFT) {
+  } else if (
+    event.key === 'ArrowRight' &&
+    currentDirection !== DIRECTIONS.LEFT
+  ) {
     currentDirection = DIRECTIONS.RIGHT;
   }
 }
