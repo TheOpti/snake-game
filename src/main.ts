@@ -6,27 +6,37 @@ export const DIRECTIONS = {
   LEFT: 'left',
   UP: 'up',
   DOWN: 'down'
-};
+} as const; 
 
-export const DIMENSIONS = {
+type Direction = typeof DIRECTIONS[keyof typeof DIRECTIONS];
+
+export const DIMENSIONS = { 
   WIDTH: 800,
   HEIGHT: 600
 };
 
 export const FRAME_LENGTH = 150;
 
-const canvasElement = document.getElementById('canvas');
+const canvasElement = document.getElementById('canvas') as HTMLCanvasElement | null;
 
-canvasElement.setAttribute('width', DIMENSIONS.WIDTH);
-canvasElement.setAttribute('height', DIMENSIONS.HEIGHT);
+if (!canvasElement) {
+  throw new Error('Canvas element not found');
+}
 
-var canvasContext = canvasElement.getContext('2d');
+canvasElement.setAttribute('width', DIMENSIONS.WIDTH.toString());
+canvasElement.setAttribute('height', DIMENSIONS.HEIGHT.toString());
 
-const snake = [];
-let food = {};
+const canvasContext = canvasElement.getContext('2d');
+if (!canvasContext) {
+  throw new Error('Canvas context not available');
+}
+
+type SnakeCell = { x: number; y: number };
+const snake: SnakeCell[] = [];
+let food: SnakeCell = { x: 0, y: 0 };
 let points = 0;
 
-let currentDirection = DIRECTIONS.RIGHT;
+let currentDirection: Direction = DIRECTIONS.RIGHT;
 
 function initializeGame() {
   document.addEventListener('keydown', checkKey);
@@ -46,9 +56,11 @@ function gameLoop() {
 
   // Get last element from snake and set it as first position
   const newPos = snake.pop();
-  newPos.x = next.X;
-  newPos.y = next.Y;
-  snake.unshift(newPos);
+  if (newPos) {
+    newPos.x = next.X;
+    newPos.y = next.Y;
+    snake.unshift(newPos);
+  }
   drawSnake();
 
   paintCell(food.x, food.y);
@@ -57,49 +69,35 @@ function gameLoop() {
 }
 
 function createSnake() {
-  var length = 15;
-  for (var i = length; i > 10; i--) {
+  const length = 15;
+  for (let i = length; i > 10; i--) {
     snake.push({ x: i, y: 5 });
   }
 }
 
 function getNextSnakePosition() {
   switch (currentDirection) {
-    case DIRECTIONS.RIGHT: {
-      return {
-        X: snake[0].x + 1,
-        Y: snake[0].y + 0
-      };
-    }
-    case DIRECTIONS.LEFT: {
-      return {
-        X: snake[0].x - 1,
-        Y: snake[0].y + 0
-      };
-    }
-    case DIRECTIONS.UP: {
-      return {
-        X: snake[0].x + 0,
-        Y: snake[0].y + 1
-      };
-    }
-    case DIRECTIONS.DOWN: {
-      return {
-        X: snake[0].x + 0,
-        Y: snake[0].y - 1
-      };
-    }
+    case DIRECTIONS.RIGHT:
+      return { X: snake[0].x + 1, Y: snake[0].y };
+    case DIRECTIONS.LEFT:
+      return { X: snake[0].x - 1, Y: snake[0].y };
+    case DIRECTIONS.UP:
+      return { X: snake[0].x, Y: snake[0].y - 1 };
+    case DIRECTIONS.DOWN:
+      return { X: snake[0].x, Y: snake[0].y + 1 };
+    default:
+      return { X: snake[0].x, Y: snake[0].y };
   }
 }
 
-function checkKey(event) {
-  if (event.keyCode === 38 && currentDirection !== DIRECTIONS.UP) {
-    currentDirection = DIRECTIONS.DOWN;
-  } else if (event.keyCode === 40 && currentDirection !== DIRECTIONS.DOWN) {
+function checkKey(event: KeyboardEvent) {
+  if (event.key === 'ArrowUp' && currentDirection !== DIRECTIONS.DOWN) {
     currentDirection = DIRECTIONS.UP;
-  } else if (event.keyCode === 37 && currentDirection !== DIRECTIONS.RIGHT) {
+  } else if (event.key === 'ArrowDown' && currentDirection !== DIRECTIONS.UP) {
+    currentDirection = DIRECTIONS.DOWN;
+  } else if (event.key === 'ArrowLeft' && currentDirection !== DIRECTIONS.RIGHT) {
     currentDirection = DIRECTIONS.LEFT;
-  } else if (event.keyCode === 39 && currentDirection !== DIRECTIONS.LEFT) {
+  } else if (event.key === 'ArrowRight' && currentDirection !== DIRECTIONS.LEFT) {
     currentDirection = DIRECTIONS.RIGHT;
   }
 }
