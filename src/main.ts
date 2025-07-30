@@ -1,7 +1,5 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { Modal } from 'bootstrap';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 
 // Direction constants

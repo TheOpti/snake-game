@@ -1,53 +1,38 @@
-import eslintRecommended from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import prettierPlugin from 'eslint-plugin-prettier';
+import js from '@eslint/js';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default [
-  eslintRecommended.configs.recommended,
+  js.configs.recommended,
   ...tseslint.configs.recommended,
+
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['**/*.{ts,tsx,js,mjs,cjs}'],
     languageOptions: {
       parser: tseslint.parser,
-      parserOptions: {
-        project: './tsconfig.json',
-        ecmaVersion: 'latest',
-        sourceType: 'module'
-      }
-    },
-    rules: {}
-  },
-
-  {
-    files: ['**/*.ts', '**/*.js', '**/*.mjs', '**/*.cjs'],
-    languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
-      globals: {
-        ...globals.browser,
-        ...globals.es2021
-      }
-    },
-    plugins: {
-      prettier: prettierPlugin
+      globals: { ...globals.browser, ...globals.es2021 }
     },
     rules: {
-      'prettier/prettier': [
-        'error',
-        {
-          singleQuote: true,
-          semi: true,
-          trailingComma: 'none'
-        }
-      ],
-
+      // your non-formatting rules
       'no-trailing-spaces': 'error',
-
       'padding-line-between-statements': [
         'error',
         { blankLine: 'always', prev: 'function', next: '*' },
         { blankLine: 'always', prev: 'class', next: '*' }
+      ]
+    }
+  },
+
+  prettierRecommended,
+
+  {
+    rules: {
+      'prettier/prettier': [
+        'error',
+        { singleQuote: true, semi: true, trailingComma: 'none' }
       ]
     }
   }
