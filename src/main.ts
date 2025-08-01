@@ -1,4 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { Modal } from 'bootstrap';
+
 import './style.css';
 
 // Direction constants
@@ -25,6 +28,19 @@ const startBtn = document.getElementById(
   'start-btn'
 ) as HTMLButtonElement | null;
 const scoreElement = document.getElementById('score') as HTMLElement | null;
+const gameOverModal = document.getElementById('gameOverModal');
+const finalScoreElement = document.getElementById('final-score');
+let gameOverModalInstance: Modal | null = null;
+
+if (gameOverModal) {
+  gameOverModal.addEventListener('hidden.bs.modal', () => {
+    resetGame();
+    if (mainMenu) mainMenu.style.display = '';
+    if (gameArea) gameArea.style.display = 'none';
+  });
+}
+
+let isGameOver = false;
 
 // Get canvas and context
 const canvasElement = document.getElementById(
@@ -61,6 +77,10 @@ function initializeGame(): void {
  * Main game loop: draws the board, moves the snake, checks collisions, and schedules next frame.
  */
 function gameLoop(): void {
+  if (isGameOver) {
+    return;
+  }
+
   // Clear board
   canvasContext.fillStyle = 'white';
   canvasContext.fillRect(0, 0, DIMENSIONS.WIDTH, DIMENSIONS.HEIGHT);
@@ -81,8 +101,12 @@ function gameLoop(): void {
 
   // Draw food and check collisions
   paintCell(food.x, food.y);
+
   checkCollision();
-  setTimeout(gameLoop, FRAME_LENGTH);
+
+  if (!isGameOver) {
+    setTimeout(gameLoop, FRAME_LENGTH);
+  }
 }
 
 /**
@@ -201,7 +225,6 @@ function checkIfFoodXYCorrect(): boolean {
  */
 function checkCollision(): void {
   const { x: snakeX, y: snakeY } = snake[0];
-
   const maxX = DIMENSIONS.WIDTH / CELL_SIZE;
   const maxY = DIMENSIONS.HEIGHT / CELL_SIZE;
 
@@ -213,8 +236,9 @@ function checkCollision(): void {
   );
 
   if (isOutOfBounds || hasCollisionWithItself) {
-    console.log('game over!');
-    // Optionally, stop the game loop or reset the game here
+    isGameOver = true;
+    showGameOverModal(points);
+    return;
   }
 
   if (snakeX === food.x && snakeY === food.y) {
@@ -267,6 +291,34 @@ function updateScore(): void {
   if (scoreElement) {
     scoreElement.textContent = `Score: ${points}`;
   }
+}
+
+/**
+ * Displays the game over modal with the final score.
+ * @param score - The final score to display.
+ */
+function showGameOverModal(score: number): void {
+  if (finalScoreElement) {
+    finalScoreElement.textContent = `Your score: ${score}`;
+  }
+
+  if (gameOverModal) {
+    if (!gameOverModalInstance) {
+      gameOverModalInstance = new Modal(gameOverModal);
+    }
+    gameOverModalInstance.show();
+  }
+}
+
+/**
+ * Resets the game state.
+ */
+function resetGame(): void {
+  snake.length = 0;
+  points = 0;
+  isGameOver = false;
+  currentDirection = DIRECTIONS.RIGHT;
+  updateScore();
 }
 
 if (startBtn) {

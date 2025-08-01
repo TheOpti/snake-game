@@ -36,6 +36,34 @@
           ></canvas>
         </div>
       </div>
+
+      <div
+        class="modal fade"
+        id="gameOverModal"
+        tabindex="-1"
+        aria-labelledby="gameOverModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="gameOverModalLabel">Game Over</h5>
+            </div>
+            <div class="modal-body">
+              <p id="final-score"></p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
