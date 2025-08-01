@@ -19,6 +19,13 @@ export const DIMENSIONS = {
 const CELL_SIZE = 20; // Size of each cell in pixels
 export const FRAME_LENGTH = 150; // ms between frames
 
+const mainMenu = document.getElementById('main-menu') as HTMLElement | null;
+const gameArea = document.getElementById('game-area') as HTMLElement | null;
+const startBtn = document.getElementById(
+  'start-btn'
+) as HTMLButtonElement | null;
+const scoreElement = document.getElementById('score') as HTMLElement | null;
+
 // Get canvas and context
 const canvasElement = document.getElementById(
   'canvas'
@@ -212,6 +219,8 @@ function checkCollision(): void {
 
   if (snakeX === food.x && snakeY === food.y) {
     snake.push({ x: food.x, y: food.y });
+    points += 1;
+    updateScore();
     clearFood();
     generateFood();
   }
@@ -251,5 +260,19 @@ function paintCell(
   }
 }
 
-// Start the game
-initializeGame();
+/**
+ * Updates the score display.
+ */
+function updateScore(): void {
+  if (scoreElement) {
+    scoreElement.textContent = `Score: ${points}`;
+  }
+}
+
+if (startBtn) {
+  startBtn.addEventListener('click', () => {
+    if (mainMenu) mainMenu.style.display = 'none';
+    if (gameArea) gameArea.style.display = '';
+    initializeGame();
+  });
+}

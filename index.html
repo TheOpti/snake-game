@@ -7,10 +7,33 @@
     <title>Snake game</title>
   </head>
   <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">Snake Game</a>
+      </div>
+    </nav>
     <div class="container mt-5">
-      <div class="row justify-content-center">
+      <div id="main-menu" class="row justify-content-center">
+        <div class="col-md-6 text-center">
+          <h1 class="mb-4">Welcome to Snake Game!</h1>
+          <button id="start-btn" class="btn btn-success btn-lg">
+            Start Game
+          </button>
+        </div>
+      </div>
+      <div
+        id="game-area"
+        class="row justify-content-center"
+        style="display: none"
+      >
         <div class="col-md-8 text-center">
-          <canvas id="canvas" width="600" height="400" class="border rounded shadow"></canvas>
+          <h4 id="score" class="mb-3">Score: 0</h4>
+          <canvas
+            id="canvas"
+            width="600"
+            height="400"
+            class="border rounded shadow"
+          ></canvas>
         </div>
       </div>
     </div>
