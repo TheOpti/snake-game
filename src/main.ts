@@ -61,11 +61,16 @@ let food: SnakeCell = { x: 0, y: 0 };
 let points = 0;
 let currentDirection: Direction = DIRECTIONS.RIGHT;
 
+let keyListenerAdded = false; // Track if key listener is added
+
 /**
  * Initializes the game: sets up event listeners, creates snake, generates food, and starts the loop.
  */
 function initializeGame(): void {
-  document.addEventListener('keydown', checkKey);
+  if (!keyListenerAdded) {
+    document.addEventListener('keydown', checkKey);
+    keyListenerAdded = true;
+  }
   createSnake();
   generateFood();
   gameLoop();
@@ -235,12 +240,16 @@ function checkCollision(): void {
 
   if (isOutOfBounds || hasCollisionWithItself) {
     isGameOver = true;
+    document.removeEventListener('keydown', checkKey); // Remove listener
+    keyListenerAdded = false;
     showGameOverModal(points);
     return;
   }
 
   if (snakeX === food.x && snakeY === food.y) {
-    snake.push({ x: food.x, y: food.y });
+    // Push a copy of the last tail cell for smooth growth
+    const tail = snake[snake.length - 1];
+    snake.push({ x: tail.x, y: tail.y });
     points += 1;
     updateScore();
     clearFood();
@@ -317,6 +326,18 @@ function resetGame(): void {
   isGameOver = false;
   currentDirection = DIRECTIONS.RIGHT;
   updateScore();
+
+  // Clear canvas immediately
+  canvasContext.fillStyle = 'white';
+  canvasContext.fillRect(0, 0, DIMENSIONS.WIDTH, DIMENSIONS.HEIGHT);
+  canvasContext.strokeStyle = 'black';
+  canvasContext.strokeRect(0, 0, DIMENSIONS.WIDTH, DIMENSIONS.HEIGHT);
+
+  // Remove keydown listener if present
+  if (keyListenerAdded) {
+    document.removeEventListener('keydown', checkKey);
+    keyListenerAdded = false;
+  }
 }
 
 if (startBtn) {
